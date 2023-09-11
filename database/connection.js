@@ -1,11 +1,12 @@
-var knex = require('knex')({
-    client: 'mysql2',
+  const knex = require('knex')({
+    client: 'pg',
     connection: {
-      host : '127.0.0.1',
-      user : 'root',
-      password : '',
-      database : 'usertest'
+      host: '127.0.0.1',
+      port: '5432',
+      user: 'postgres',
+      database: 'apiusers',
+      password: 'root'
     }
   });
-
-module.exports = knex
+  
+  module.exports = knex
