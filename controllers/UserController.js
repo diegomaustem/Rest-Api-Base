@@ -1,3 +1,4 @@
+const knex = require("../database/connection")
 var User = require("../models/User")
 class UserController {
     
@@ -40,6 +41,24 @@ class UserController {
 
         res.status(200)
         res.send("Sucesso!")
+    }
+
+    async edit(req, res) {
+        let {id, name, role, email} = req.body
+        let result = await User.update(id, email, name, role)
+
+        if(result != undefined) {
+            if(result.status) {
+                res.status(200)
+                res.send("Ok")
+            }else{
+                res.status(406)
+                res.send(result.err)
+            }
+        }else{
+            res.status(406)
+            res.send("Ocorreu um erro no servidor!")
+        }
     }
 }
 
