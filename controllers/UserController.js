@@ -1,6 +1,10 @@
 const knex = require("../database/connection")
 var User = require("../models/User")
 var PasswordToken = require("../models/PasswordToken")
+var jwt = require("jsonwebtoken")
+var bcrypt = require("bcrypt")
+
+var secret = "cd7b32a268cae54174facdccac34db519cf6aba5d1ab71918a021de65f69ec4c"
 class UserController {
     async index(req, res) {
         let users = await User.findAll()
@@ -23,24 +27,23 @@ class UserController {
     async create(req, res) {
         let {email, name, password} = req.body
 
-        if(email == undefined) {
-            res.status(403)
-            res.json({err: "O e-mail é inválido!"})
-            return 
-        }
-
         let emailExists =  await User.findEmail(email)
 
-        if(emailExists) {
+        if(emailExists === true) {
             res.status(406) 
             res.json({err: "O e-mail já está cadastrado!"})
             return 
+        } else {
+            if((email != undefined) && (password != undefined) && (name != undefined)) {
+                await User.new(email, password, name)
+                res.status(200)
+                res.send("Usuário cadastrado com sucesso!")
+            }else{
+                res.status(406) 
+                res.json({err: "Verifique se todos os campos foram preenchidos!"})
+                return 
+            }
         }
-
-        await User.new(email, password, name)
-
-        res.status(200)
-        res.send("Sucesso!")
     }
 
     async edit(req, res) {
@@ -100,6 +103,11 @@ class UserController {
             res.status(406)
             res.send("Token Inválido!")
         }
+    }
+
+    async login(req, res) {
+
+       
     }
 }
 
