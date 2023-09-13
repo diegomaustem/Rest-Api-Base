@@ -106,7 +106,26 @@ class UserController {
         }
     }
 
-    async login(req, res) { }
+    async login(req, res) {
+        let {email, password} = req.body
+        let user = await User.findEmail(email)
+
+        if(user != undefined) {
+            let result = await bcrypt.compare(password, user.password)
+
+            if(result) {
+                let token = jwt.sign({email: user.email, role: user.role}, secret)
+
+                res.status(200)
+                res.json({token: token})
+            }else{
+                res.status(406)
+                res.send("Senha incorreta!")
+            }
+        }else{
+            res.json({status: false})
+        }
+    }
 }
 
 module.exports = new UserController();
