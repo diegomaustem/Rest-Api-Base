@@ -29,7 +29,7 @@ class UserController {
 
         let emailExists =  await User.findEmail(email)
 
-        if(emailExists === true) {
+        if(emailExists != undefined) {
             res.status(406) 
             res.json({err: "O e-mail já está cadastrado!"})
             return 
@@ -48,6 +48,7 @@ class UserController {
 
     async edit(req, res) {
         let {id, name, role, email} = req.body
+
         let result = await User.update(id, email, name, role)
 
         if(result != undefined) {
@@ -105,10 +106,7 @@ class UserController {
         }
     }
 
-    async login(req, res) {
-
-       
-    }
+    async login(req, res) { }
 }
 
 module.exports = new UserController();

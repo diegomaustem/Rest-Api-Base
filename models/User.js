@@ -43,9 +43,9 @@ class User {
             let result = await knex.select("*").from("users").where({email: email})
             
             if(result.length > 0) {
-                return true
+                return result[0]
             }else{
-                return false
+                return undefined
             }
         }catch(err){
             console.log(err)
@@ -69,14 +69,15 @@ class User {
     }
 
     async update(id, email, name, role) {
-        var user = await this.findById(id)
+        let user = await this.findById(id)
 
         if(user != undefined) {
             let editUser = {}
 
             if(email != undefined) {
                 let result = await this.findEmail(email)
-                if(result == false) {
+
+                if(result === undefined || result.id === user.id) {
                     editUser.email = email
                 }else{
                     return {status: false,err: "O e-mail já está cadastrado!"}
