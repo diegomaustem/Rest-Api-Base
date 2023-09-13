@@ -126,4 +126,4 @@ class User {
     }
 }
 
-module.exports = new User();
+module.exports = new User()

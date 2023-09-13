@@ -6,6 +6,7 @@ var bcrypt = require("bcrypt")
 
 var secret = "cd7b32a268cae54174facdccac34db519cf6aba5d1ab71918a021de65f69ec4c"
 class UserController {
+
     async index(req, res) {
         let users = await User.findAll()
         res.json(users)
@@ -128,4 +129,4 @@ class UserController {
     }
 }
 
-module.exports = new UserController();
+module.exports = new UserController()
